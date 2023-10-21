@@ -4,8 +4,8 @@ Docker compose version ```Docker Compose version v2.22.0-desktop.2```
 
 System Info 
 
-```OS Name:                   Microsoft Windows 11 Home
+OS Name:                   Microsoft Windows 11 Home
 OS Version:                10.0.22621 N/A Build 22621
 OS Manufacturer:           Microsoft Corporation
 OS Configuration:          Standalone Workstation
-OS Build Type:             Multiprocessor Free```
+OS Build Type:             Multiprocessor Free
