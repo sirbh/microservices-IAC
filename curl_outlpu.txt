@@ -1,0 +1,26 @@
+PS C:\Users\soura\OneDrive\Desktop\CI-CD\code\knsach> curl http://localhost:8087/
+
+
+StatusCode        : 200
+StatusDescription : OK
+Content           : Log-1 something unexpected happend
+                    Log-2 SND 2 2023-10-21T19:11:02.156471757 172.22.0.3:8000 MSG
+                    Log-3 SND 2 2023-10-21T19:11:02.156471757 172.22.0.3:8000 ::ffff:172.22.0.5:50238
+                    Log-4 200 2023-10-21T...
+RawContent        : HTTP/1.1 200 OK
+                    Connection: keep-alive
+                    Keep-Alive: timeout=5
+                    Transfer-Encoding: chunked
+                    Content-Type: text/plain
+                    Date: Sat, 21 Oct 2023 19:12:55 GMT
+                    X-Powered-By: Express
+
+                    Log-1 something unex...
+Forms             : {}
+Headers           : {[Connection, keep-alive], [Keep-Alive, timeout=5], [Transfer-Encoding, chunked], [Content-Type,
+                    text/plain]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : mshtml.HTMLDocumentClass
+RawContentLength  : 3791
