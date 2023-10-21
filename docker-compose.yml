@@ -1,0 +1,75 @@
+version: '3'
+services:
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    # ports:
+    #   - "5672:5672"  # RabbitMQ default AMQP port
+    #   - "15672:15672"  # RabbitMQ Management UI port
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    networks:
+      - knsach_network
+    healthcheck:
+        test: "rabbitmq-diagnostics -q ping"
+        interval: 30s
+        timeout: 10s
+        retries: 5
+
+  service1:
+    image: knsach-service-1-img
+    build:
+      context: ./service1/
+      dockerfile: Dockerfile
+    environment:
+      - HOST=service2
+      - RABBIT_MQ_HOST=rabbitmq
+      - PORT=8000
+    container_name: knsach-service-1-container
+    depends_on:
+      - service2
+      - monitor
+    networks:
+      - knsach_network
+    command: ["java", "-cp", "/app:/app/lib/amqp-client-5.19.0.jar:/app/lib/slf4j-api-1.7.36.jar:/app/lib/slf4j-simple-1.7.36.jar:/app/target/", "App"]
+  
+  service2:
+    image: knsach-service-2-img
+    build:
+      context: ./service2/
+      dockerfile: Dockerfile
+    environment:
+      - PORT=8000
+      - RABBIT_MQ_HOST=rabbitmq
+    # ports:
+    #   - 3000:8000
+    container_name: knsach-service-2-container
+    networks:
+      - knsach_network
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    command: node receiver.js
+
+
+  monitor:
+    image: knsach-monitor-img
+    build:
+      context: ./monitor/
+      dockerfile: Dockerfile
+    environment:
+      - RABBIT_MQ_HOST=rabbitmq
+      - PORT=8087
+    ports:
+      - 8087:8087
+    container_name: knsach-monitor-cont
+    networks:
+      - knsach_network
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    command: node monitor.js    
+
+networks:
+  knsach_network:
