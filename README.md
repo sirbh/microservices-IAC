@@ -23,6 +23,12 @@
 4. Now run `ansible-playbook -i knsach-service-one,knsach-service-two, playbook.yml` to run instruction on both the services and get the output similar to o3 as shown below. It again ask for fingerprint which be given `yes` as answere.
 5. Now again run the previous command to get the output with reduced number of changes for service-two.
 
+#### The output was expected because when we first run the playbook it installed git which was not present on the remote container hence it showed changed to 3 but when we run again the same git installtion playbook for same container it shows changed to be 2 because git installtion did not run.
+
+#### Remaining two commands other than git installation have no way to tell ansible wether something is changed on remote server or not hence they will always count as changed.
+
+#### Setting up ansible on docker was most challenging task in this excercise.
+
 ### Outputs
 
 #### Output 1(O1)
