@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  knsach-ansible-control:
+    build:
+      context: .
+      dockerfile: Dockerfile.ansible
+    volumes:
+      - ./ansible:/ansible
+    working_dir: /ansible
+    networks:
+      - knsach-network
+
+  knsach-service-one:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    depends_on:
+      - knsach-ansible-control
+    networks:
+      - knsach-network
+
+  knsach-service-two:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    depends_on:
+      - knsach-ansible-control
+    networks:
+      - knsach-network
+
+networks:
+  knsach-network:
+    driver: bridge

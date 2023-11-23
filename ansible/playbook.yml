@@ -1,0 +1,30 @@
+- name: Configure Target Container
+  hosts: all
+  remote_user: myuser
+  gather_facts: true
+  vars:
+    ansible_ssh_private_key_file: "/home/ansible_user/.ssh/id_rsa"
+  tasks:
+  tasks:
+    - name: Ensure latest git version is installed
+      become: yes
+      apt:
+        name: git
+        state: latest
+      
+    - name: Check if Git is installed using git command
+      command: "git --version"
+      register: git_check_result
+      ignore_errors: true
+
+    - name: Display Git installation status
+      debug:
+        var: git_check_result.stdout
+
+    - name: Run uptime
+      command: "uptime"
+      register: uptime_output
+
+    - name: Display Uptime Output
+      debug:
+        var: uptime_output.stdout_lines

@@ -1,0 +1,35 @@
+# Use an official Node.js image as the base image
+FROM ubuntu:latest
+
+# Install the OpenSSH server
+RUN apt-get update && \
+    apt-get install -y openssh-server sudo && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create a new user
+RUN useradd -m -d /home/myuser -s /bin/bash myuser
+
+# Copy your SSH public and private keys to the container
+COPY id_rsa.pub /home/myuser/.ssh/authorized_keys
+COPY id_rsa /home/myuser/.ssh/id_rsa
+
+# Set the correct permissions
+RUN chown -R myuser:myuser /home/myuser/.ssh && \
+    chmod 700 /home/myuser/.ssh && \
+    chmod 600 /home/myuser/.ssh/authorized_keys /home/myuser/.ssh/id_rsa
+
+# Add myuser to the sudo group
+RUN usermod -aG sudo myuser && \
+    echo 'myuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Disable password authentication (optional)
+RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+
+# Create SSH directory for the new user
+RUN mkdir -p /run/sshd
+
+# Expose SSH port
+EXPOSE 22
+
+# Start SSH server
+CMD ["/usr/sbin/sshd", "-D"]

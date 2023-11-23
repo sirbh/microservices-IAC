@@ -1,0 +1,30 @@
+FROM python:3.8-slim
+
+# Install required packages for Ansible
+RUN apt-get update \
+    && apt-get install -y \
+        ansible \
+        openssh-client \
+        net-tools \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a non-root user for running Ansible
+RUN useradd -ms /bin/bash ansible_user
+RUN mkdir /home/ansible_user/.ssh
+
+WORKDIR /ansible
+
+# Copy the SSH key for authentication
+COPY id_rsa /home/ansible_user/.ssh/
+COPY id_rsa.pub /home/ansible_user/.ssh/
+
+# Set proper permissions for the SSH key
+RUN chown -R ansible_user:ansible_user /home/ansible_user/.ssh \
+    && chmod 700 /home/ansible_user/.ssh \
+    && chmod 600 /home/ansible_user/.ssh/id_rsa \
+    && chmod 644 /home/ansible_user/.ssh/id_rsa.pub
+
+# Set the non-root user as the default user
+USER ansible_user
+
+CMD ["sleep", "infinity"]
