@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - deploy
 
 build:
   stage: build
@@ -13,5 +14,12 @@ test:
   stage: test
   script:
     - echo "Running tests..."
+  only:
+    - project
+
+deploy:
+  stage: deploy
+  script:
+    - docker compose up -d
   only:
     - project
