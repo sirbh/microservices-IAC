@@ -6,7 +6,7 @@ stages:
 build:
   stage: build
   script:
-    - echo "Building the application..."
+    - npm install
   only:
     - project
 
