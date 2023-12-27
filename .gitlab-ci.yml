@@ -6,7 +6,7 @@ stages:
 build:
   stage: build
   script:
-    - npm install
+    - echo "Running build..."
   only:
     - project
 
