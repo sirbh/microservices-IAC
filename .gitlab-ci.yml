@@ -23,3 +23,5 @@ deploy:
     - echo "Running deploy..."
   only:
     - project
+  tags:
+    - deploy
