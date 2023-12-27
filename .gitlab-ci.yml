@@ -20,7 +20,7 @@ test:
 deploy:
   stage: deploy
   script:
-    - echo "Running deploy..."
+    - docker -v
   only:
     - project
   tags:
