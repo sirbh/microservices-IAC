@@ -20,6 +20,6 @@ test:
 deploy:
   stage: deploy
   script:
-    - docker compose up -d
+    - echo "Running deploy..."
   only:
     - project
