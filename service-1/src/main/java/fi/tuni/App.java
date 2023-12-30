@@ -68,10 +68,10 @@ public class App {
     };
 
     public static void main(String[] args) throws Exception {
-        // host = System.getenv("HOST");
-        // port = System.getenv("PORT");
-        host = "localhost";
-        port = "3000";
+        host = System.getenv("HOST");
+        port = System.getenv("PORT");
+        // host = "localhost";
+        // port = "3000";
         createChannelAndExchange();
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);

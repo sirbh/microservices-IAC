@@ -18,8 +18,7 @@ public class Utility {
 
     public static void createChannelAndExchange() {
         ConnectionFactory factory = new ConnectionFactory();
-        // factory.setHost(System.getenv("RABBIT_MQ_HOST")); // Replace with your RabbitMQ server's hostname or IP address
-        factory.setHost("localhost");
+        factory.setHost(System.getenv("RABBIT_MQ_HOST")); // Replace with your RabbitMQ server's hostname or IP address
         try {
             Connection connection = factory.newConnection();
             channel = connection.createChannel();

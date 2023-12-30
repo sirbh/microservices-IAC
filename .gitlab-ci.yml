@@ -6,22 +6,30 @@ stages:
 build:
   stage: build
   script:
-    - echo "Running build..."
+    - docker compose build
   only:
     - project
+  tags:
+    - local
 
 test:
   stage: test
+  before_script:
+    - docker compose up -d
+  after_script:
+    - docker compose down
   script:
-    - echo "Running tests..."
+    - powershell -ExecutionPolicy Bypass -File .\tests\containers\check_containers.ps1
   only:
     - project
+  tags:
+    - local
 
 deploy:
   stage: deploy
   script:
-    - docker -v
+    - docker compose up -d
   only:
     - project
   tags:
-    - deploy
+    - local
