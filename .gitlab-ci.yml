@@ -22,6 +22,8 @@ test:
     - docker compose down
   script:
     - powershell -ExecutionPolicy Bypass -File .\tests\containers\check_containers.ps1
+    - echo "test services are up and running"
+    - npx newman run .\tests\DevopsProject.postman_collection.json
   only:
     - project
   tags:
