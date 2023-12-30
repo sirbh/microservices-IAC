@@ -64,7 +64,7 @@ services:
       - PORT=8087
     ports:
       - 8087:8087
-    container_name: knsach-monitor-cont
+    container_name: knsach-monitor-container
     networks:
       - knsach_network
     depends_on:
