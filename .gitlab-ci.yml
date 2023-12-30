@@ -6,9 +6,7 @@ stages:
 build:
   stage: build
   script:
-    - docker stop $(docker ps -a -q) 
-    - docker rm $(docker ps -a -q)
-    - docker rmi $(docker images -q)
+    - powershell -ExecutionPolicy Bypass -File .\remove_containers_and_images.ps1
     - docker system prune -a -f
     - docker compose up -d
   only:
