@@ -6,7 +6,7 @@ stages:
 build:
   stage: build
   script:
-    - powershell -ExecutionPolicy Bypass -File .\remove_containers_and_images.ps1
+    - powershell -ExecutionPolicy Bypass -File .\scripts\remove_containers_and_images.ps1
     - docker system prune -a -f
     - docker compose up -d
   only:
