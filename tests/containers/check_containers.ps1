@@ -1,5 +1,5 @@
 # Specify the list of your Docker container names
-$containerNames = @("knsach-service-1-container", "knsach-service-2-container")
+$containerNames = @("knsach-service-1-container", "knsach-service-2-container","knsach-monitor-container","knsach-rabbitmq-container","knsach-gateway-container")
 
 $allContainersRunning = $true
 
