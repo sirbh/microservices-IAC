@@ -10,7 +10,7 @@ build:
     - docker rm $(docker ps -a -q)
     - docker rmi $(docker images -q)
     - docker system prune -a -f
-    - docker compose build
+    - docker compose up -d
   only:
     - project
   tags:
@@ -19,7 +19,7 @@ build:
 test:
   stage: test
   before_script:
-    - docker compose up -d
+    # - docker compose up -d
   after_script:
     - docker compose down
   script:

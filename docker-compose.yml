@@ -72,5 +72,23 @@ services:
         condition: service_healthy
     command: node monitor.js   
 
+  gateway:
+    image: knsach-gateway-img
+    build:
+      context: ./gateway/
+      dockerfile: Dockerfile
+    environment:
+      - RABBIT_MQ_HOST=rabbitmq
+      - PORT=8080
+    ports:
+      - 8080:8080
+    container_name: knsach-gateway-container
+    networks:
+      - knsach_network
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    command: npm start
+
 networks:
   knsach_network:
