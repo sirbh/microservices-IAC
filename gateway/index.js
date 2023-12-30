@@ -1,9 +1,12 @@
 // server.js
 const amqp = require("amqplib");
 const express = require("express");
+const axios = require("axios");
 const app = express();
 const port = process.env.PORT || 3002;
 const rabbit_mq_host = process.env.RABBIT_MQ_HOST || 'localhost';
+const monitor_host = process.env.MONITOR_HOST || 'localhost';
+const monitor_port = process.env.MONITOR_PORT || 3001;
 let state = "RUNNING";
 
 let channel;
@@ -40,6 +43,18 @@ app.use(express.json());
 // Define a route that responds to GET requests on the root path
 app.get("/", (req, res) => {
   res.send("Hello, Express!");
+});
+
+app.get("/messages", (req, res) => {
+  axios.get(`http://${monitor_host}:${monitor_port}`).then((response) => {
+    res.status(200);
+    res.json(response.data);
+    res.end()
+  }).catch((error) => {
+    console.log(error); 
+    res.status(500);
+    res.end();
+  });
 });
 
 app.put("/state", (req, res) => {

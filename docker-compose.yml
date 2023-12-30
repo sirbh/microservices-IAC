@@ -80,6 +80,8 @@ services:
     environment:
       - RABBIT_MQ_HOST=rabbitmq
       - PORT=8080
+      - MONITOR_PORT=8087
+      - MONITOR_HOST=monitor
     ports:
       - 8080:8080
     container_name: knsach-gateway-container

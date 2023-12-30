@@ -31,9 +31,7 @@ async function consumeAndRespond() {
 app.get("/", (req, res) => {
   res.setHeader('Content-Type', 'text/plain');
   res.status(200);
-  logs.logs.forEach((log, index) => {
-    res.write(`Log-${index+1} ${log}\n`);
-  })
+  res.json(logs);
   res.end();
 });
 
