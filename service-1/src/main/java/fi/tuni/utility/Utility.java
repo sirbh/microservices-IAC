@@ -1,4 +1,4 @@
-package utility;
+package fi.tuni.utility;
 
 import java.net.http.HttpClient;
 
@@ -18,7 +18,8 @@ public class Utility {
 
     public static void createChannelAndExchange() {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(System.getenv("RABBIT_MQ_HOST")); // Replace with your RabbitMQ server's hostname or IP address
+        // factory.setHost(System.getenv("RABBIT_MQ_HOST")); // Replace with your RabbitMQ server's hostname or IP address
+        factory.setHost("localhost");
         try {
             Connection connection = factory.newConnection();
             channel = connection.createChannel();

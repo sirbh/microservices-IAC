@@ -1,4 +1,6 @@
-import static utility.Utility.*;
+package fi.tuni;
+
+import static fi.tuni.utility.Utility.*;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -12,8 +14,6 @@ import java.time.LocalDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-
 
 /**
  * 
@@ -31,43 +31,47 @@ public class App {
         ++counter;
         System.out.println("Sending message " + counter + " to the exchange.");
         try {
-            serverUrl = "http://"+host+":"+port+"/" + "?text=";
+            serverUrl = "http://" + host + ":" + port + "/" + "?text=";
             // message to be sent to the exchange and http request
-            String message = "SND "+ counter+" "+LocalDateTime.now().toString()+" "+InetAddress.getByName(host).getHostAddress()+":"+port;
-            
+            String message = "SND " + counter + " " + LocalDateTime.now().toString() + " "
+                    + InetAddress.getByName(host).getHostAddress() + ":" + port;
+
             // send message to the exchange
             channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY_MESSAGE, null, message.getBytes("UTF-8"));
 
             // send http request by encoding the message
             String encodedMessage = URLEncoder.encode(message, "UTF-8");
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(serverUrl+encodedMessage))
+                    .uri(URI.create(serverUrl + encodedMessage))
                     .GET()
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             // send log to the exchange
-            if(response.statusCode()==200){
-                channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY_LOG, null, ("200 "+LocalDateTime.now().toString()).getBytes("UTF-8"));
-            }
-            else{
-                channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY_LOG, null, "something unexpected happend".getBytes("UTF-8"));
+            if (response.statusCode() == 200) {
+                channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY_LOG, null,
+                        ("200 " + LocalDateTime.now().toString()).getBytes("UTF-8"));
+            } else {
+                channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY_LOG, null,
+                        "something unexpected happend".getBytes("UTF-8"));
             }
 
         } catch (IOException | InterruptedException e) {
-            try{
+            try {
 
-                channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY_LOG, null, "something unexpected happend".getBytes("UTF-8"));
-            }catch(IOException ex){
+                channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY_LOG, null,
+                        "something unexpected happend".getBytes("UTF-8"));
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
     };
 
-
     public static void main(String[] args) throws Exception {
-        host = System.getenv("HOST");
-        port = System.getenv("PORT");
+        // host = System.getenv("HOST");
+        // port = System.getenv("PORT");
+        host = "localhost";
+        port = "3000";
         createChannelAndExchange();
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -77,6 +81,6 @@ public class App {
             scheduler.shutdown();
             System.out.println("Scheduler stopped.");
 
-        }, 40, TimeUnit.SECONDS);
+        }, 400, TimeUnit.SECONDS);
     }
 }
