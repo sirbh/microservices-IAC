@@ -43,6 +43,82 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Set State to INIT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"\r",
+							"  const stateChangeTime =  new Date().toISOString().match(/\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}/)[0]\r",
+							"\r",
+							"  const request = {\r",
+							"    url: \"http://localhost:8080/messages\",\r",
+							"    method: \"get\",\r",
+							"  };\r",
+							"\r",
+							"  setTimeout(()=>{\r",
+							"    pm.sendRequest(request, function (err, response) {\r",
+							"    if (err) {\r",
+							"      console.error(err);\r",
+							"      return;\r",
+							"    }\r",
+							"    console.log(response.json().logs[response.json().logs.length-1])\r",
+							"    const logsAfterCurrentTime = response.json().logs.filter((log) => {\r",
+							"      const logTimestamp = log.match(/\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}/);\r",
+							"      if (!logTimestamp) return false;\r",
+							"      const date = new Date(logTimestamp[0]);\r",
+							"      const stateDate = new Date(stateChangeTime);\r",
+							"      return date >= stateDate;\r",
+							"    });\r",
+							"    const logsContainingSND1 = logsAfterCurrentTime.filter((log) => {\r",
+							"      return log.match(/SND 1 /);\r",
+							"    });\r",
+							"\r",
+							"    // Check if logs after current time exist\r",
+							"    pm.test(\"Logs after current time or equal contain SND 1\", function () {\r",
+							"      pm.expect(response.json().logs).to.have.length.above(0);\r",
+							"      pm.expect(logsContainingSND1).to.have.length.above(0);\r",
+							"    });\r",
+							"  });\r",
+							"\r",
+							"  },2000);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"state\":\"INIT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/state",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"state"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
