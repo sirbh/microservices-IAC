@@ -15,6 +15,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.rabbitmq.client.DeliverCallback;
+
 /**
  * 
  * Hello world!
@@ -26,6 +28,7 @@ public class App {
     private static String host;
     private static String port;
 
+    private static String state = "";
 
     private static Runnable task = () -> {
         ++counter;
@@ -73,6 +76,17 @@ public class App {
         // host = "localhost";
         // port = "3000";
         createChannelAndExchange();
+
+        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+            String message = new String(delivery.getBody(), "UTF-8");
+            System.out.println(" [x] Received '" + message + "'");
+            if(message.equals("INIT")){
+                counter = 0;
+            }
+        };
+
+        channel.basicConsume("state_queue", true, deliverCallback, consumerTag -> {
+        });
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 

@@ -66,7 +66,8 @@ app.put("/state", (req, res) => {
   );
 
   state = req.body.state;
-  res.send("OK");
+  res.status(200);
+  res.end();
 });
 
 // Start the server on the specified port
