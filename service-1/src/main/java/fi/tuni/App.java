@@ -28,10 +28,13 @@ public class App {
     private static String host;
     private static String port;
 
-    private static String state = "";
+    private static Boolean sendRequest = true;
 
     private static Runnable task = () -> {
         ++counter;
+        if(!sendRequest){
+            return;
+        }
         System.out.println("Sending message " + counter + " to the exchange.");
         try {
             serverUrl = "http://" + host + ":" + port + "/" + "?text=";
@@ -81,8 +84,15 @@ public class App {
             String message = new String(delivery.getBody(), "UTF-8");
             System.out.println(" [x] Received '" + message + "'");
             if(message.equals("INIT")){
+                sendRequest = true;
                 counter = 0;
             }
+            else if(message.equals("RUNNING")){
+                sendRequest = true;
+            }
+            else if(message.equals("PAUSED")){
+                sendRequest = false;
+            }   
         };
 
         channel.basicConsume("state_queue", true, deliverCallback, consumerTag -> {
