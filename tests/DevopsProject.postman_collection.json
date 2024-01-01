@@ -86,7 +86,8 @@
 							"    });\r",
 							"  });\r",
 							"\r",
-							"  },2000);\r",
+							"  },4000);\r",
+							"\r",
 							"});\r",
 							""
 						],
@@ -100,6 +101,80 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"state\":\"INIT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/state",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"state"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set State to PAUSED",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Should have same last log after some time interval when state is set to PAUSED\",()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"\r",
+							"     let lastLog = \"\";\r",
+							"    setTimeout(()=>{\r",
+							"   pm.sendRequest({\r",
+							"    url:\"http://localhost:8080/messages\",\r",
+							"    method:\"get\"\r",
+							"   },(err,response)=>{\r",
+							"    if(err){\r",
+							"        console.log(err)\r",
+							"    }\r",
+							"    lastLog = response.json().logs[response.json().logs.length-1];\r",
+							"   })\r",
+							"},2000)\r",
+							"\r",
+							"setTimeout(()=>{\r",
+							"   pm.sendRequest({\r",
+							"    url:\"http://localhost:8080/messages\",\r",
+							"    method:\"get\"\r",
+							"   },(err,response)=>{\r",
+							"    if(err){\r",
+							"        console.log(err)\r",
+							"    }\r",
+							"    let currentLastLog = response.json().logs[response.json().logs.length-1];\r",
+							"    pm.expect(lastLog).to.equal(currentLastLog);\r",
+							"   })\r",
+							"},4000)\r",
+							"\r",
+							"\r",
+							"})\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"state\":\"PAUSED\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
