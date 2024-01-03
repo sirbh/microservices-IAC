@@ -24,6 +24,8 @@ test:
     - powershell -ExecutionPolicy Bypass -File .\tests\containers\check_containers.ps1
     - echo "test services are up and running"
     - npx newman run .\tests\DevopsProject.postman_collection.json
+    - powershell -ExecutionPolicy Bypass -File .\tests\containers\check_containers_shutdown.ps1
+
   only:
     - project
   tags:
