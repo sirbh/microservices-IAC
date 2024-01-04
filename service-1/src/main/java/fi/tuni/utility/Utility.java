@@ -19,10 +19,12 @@ public class Utility {
     public static void createChannelAndExchange() {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(System.getenv("RABBIT_MQ_HOST")); // Replace with your RabbitMQ server's hostname or IP address
+        // factory.setHost("localhost");
         try {
             Connection connection = factory.newConnection();
             channel = connection.createChannel();
             channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.DIRECT, true);
+            channel.exchangeDeclare("The_StateExchange", BuiltinExchangeType.FANOUT, true);
         } catch (Exception e) {
             e.printStackTrace();
         }

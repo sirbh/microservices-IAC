@@ -1,15 +1,21 @@
 version: '3'
 services:
   rabbitmq:
-    image: "rabbitmq:3-management"
+    # image: "rabbitmq:3-management"
+    image: "knsach-rabbitmq-img"
+    build: 
+      context: ./rabbitmq/
+      dockerfile: Dockerfile
     container_name: knsach-rabbitmq-container
     ports:
+      - "8089:8089"
       - "5672:5672"  # RabbitMQ default AMQP port
       - "15672:15672"  # RabbitMQ Management UI port
     environment:
       RABBITMQ_DEFAULT_USER: "guest"
       RABBITMQ_DEFAULT_PASS: "guest"
       RABBITMQ_DEFAULT_VHOST: "/"
+      PORT: 8089
     networks:
       - knsach_network
     healthcheck:
@@ -17,6 +23,7 @@ services:
         interval: 30s
         timeout: 10s
         retries: 5
+    command: ["npm", "start"]
 
   service1:
     image: knsach-service-1-img
@@ -79,6 +86,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - RABBIT_MQ_HOST=rabbitmq
+      - RABBIT_MQ_PORT=8089
       - PORT=8080
       - MONITOR_PORT=8087
       - MONITOR_HOST=monitor

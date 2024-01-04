@@ -32,7 +32,7 @@ public class App {
 
     private static Runnable task = () -> {
         ++counter;
-        if(!sendRequest){
+        if (!sendRequest) {
             return;
         }
         System.out.println("Sending message " + counter + " to the exchange.");
@@ -80,24 +80,6 @@ public class App {
         // port = "3000";
         createChannelAndExchange();
 
-        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
-            System.out.println(" [x] Received '" + message + "'");
-            if(message.equals("INIT")){
-                sendRequest = true;
-                counter = 0;
-            }
-            else if(message.equals("RUNNING")){
-                sendRequest = true;
-            }
-            else if(message.equals("PAUSED")){
-                sendRequest = false;
-            }   
-        };
-
-        channel.basicConsume("state_queue", true, deliverCallback, consumerTag -> {
-        });
-
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         scheduler.scheduleAtFixedRate(task, 0, 2, TimeUnit.SECONDS);
@@ -106,5 +88,31 @@ public class App {
             System.out.println("Scheduler stopped.");
 
         }, 400, TimeUnit.SECONDS);
+
+        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+            String message = new String(delivery.getBody(), "UTF-8");
+            System.out.println(" [x] Received '" + message + "'");
+            if (message.equals("INIT")) {
+                sendRequest = true;
+                counter = 0;
+            } else if (message.equals("RUNNING")) {
+                sendRequest = true;
+            } else if (message.equals("PAUSED")) {
+                sendRequest = false;
+            } else if (message.equals("SHUTDOWN")) {
+                sendRequest = false;
+                System.out.println("Shutdown initiated.");
+                scheduler.shutdown();
+                System.out.println("Shutdown complete.");
+                System.exit(0);
+            }
+        };
+
+        String stateQueue = channel.queueDeclare("service_1_state_queue", false, true, true, null).getQueue();
+        channel.queueBind(stateQueue, "The_StateExchange", "");
+
+        channel.basicConsume(stateQueue, true, deliverCallback, consumerTag -> {
+        });
+
     }
 }
