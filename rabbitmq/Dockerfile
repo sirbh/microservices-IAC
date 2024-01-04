@@ -13,3 +13,6 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+
+RUN chmod +x ./scripts/start_mq.sh
+RUN chmod +x ./scripts/stop_mq.sh

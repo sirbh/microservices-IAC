@@ -19,10 +19,7 @@ app.listen(port, () => {
   exec('./scripts/start_mq.sh', (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing script: ${error}`);
-      return res.status(500).send('Error executing script');
     }
-
     console.log(`Script output: ${stdout}`);
-    res.send('Start Script executed successfully');
   });
 });
