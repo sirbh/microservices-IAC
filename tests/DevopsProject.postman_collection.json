@@ -262,6 +262,147 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Return RUNNING State Correctly",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Should return RUNNING state\",()=>{\r",
+							"    pm.sendRequest({\r",
+							"        url:\"http://localhost:8080/state\",\r",
+							"        method:\"get\"\r",
+							"    },(err,resp)=>{\r",
+							"        console.log(resp.text())\r",
+							"        pm.expect(resp.text()).to.equal(\"RUNNING\");\r",
+							"    })\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"state\":\"RUNNING\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/state",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"state"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Return PAUSED State Correctly",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Should return PAUSED state\",()=>{\r",
+							"    pm.sendRequest({\r",
+							"        url:\"http://localhost:8080/state\",\r",
+							"        method:\"get\"\r",
+							"    },(err,resp)=>{\r",
+							"        console.log(resp.text())\r",
+							"        pm.expect(resp.text()).to.equal(\"PAUSED\");\r",
+							"    })\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"state\":\"PAUSED\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/state",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"state"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Return Correct state for INIT request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Should return RUNNING state\",()=>{\r",
+							"    pm.sendRequest({\r",
+							"        url:\"http://localhost:8080/state\",\r",
+							"        method:\"get\"\r",
+							"    },(err,resp)=>{\r",
+							"        console.log(resp.text())\r",
+							"        pm.expect(resp.text()).to.equal(\"RUNNING\");\r",
+							"    })\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"state\":\"INIT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/state",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"state"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
