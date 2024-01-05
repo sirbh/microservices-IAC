@@ -403,6 +403,101 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Return Correct run logs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Should log state correctly\",()=>{\r",
+							"    const expectedLogs=[\r",
+							"        \"RUNNING->PAUSED\",\r",
+							"        \"PAUSED->RUNNING\",\r",
+							"        \"RUNNING->INIT\",\r",
+							"        \"INIT->RUNNING\"\r",
+							"    ];\r",
+							"    pm.sendRequest({\r",
+							"        url:\"http://localhost:3002/state\",\r",
+							"        method:\"put\",\r",
+							"        body:{\r",
+							"            mode:\"raw\",\r",
+							"            raw:{\r",
+							"                state:\"RUNNING\"\r",
+							"            },\r",
+							"            options:{\r",
+							"                raw:{\r",
+							"                    language:\"json\"\r",
+							"                }\r",
+							"            }\r",
+							"        }\r",
+							"    },()=>{\r",
+							"       pm.sendRequest({\r",
+							"        url:\"http://localhost:3002/state\",\r",
+							"        method:\"put\",\r",
+							"        headers:{\r",
+							"            \"Content-Type\":\"application/json\"\r",
+							"        },\r",
+							"        body:{\r",
+							"            mode:\"raw\",\r",
+							"            raw:{\r",
+							"                state:\"INIT\"\r",
+							"            },\r",
+							"            options:{\r",
+							"                raw:{\r",
+							"                    language:\"json\"\r",
+							"                }\r",
+							"            }\r",
+							"        }\r",
+							"       },(error,resp)=>{\r",
+							"           pm.sendRequest({\r",
+							"            url:\"http://localhost:3002/run-log\",\r",
+							"            method:\"get\"\r",
+							"           },(err,resp)=>{\r",
+							"            let k=3;\r",
+							"            console.log(resp.json().logs)\r",
+							"            for(let i = resp.json().logs.length-1;i>=0;i--){\r",
+							"                pm.expect(resp.json().logs[i].split(\" \")[1]).to.be.equal(expectedLogs[k]);\r",
+							"                k--;\r",
+							"                if(k<=-1){\r",
+							"                    break;\r",
+							"                }\r",
+							"            }\r",
+							"           })\r",
+							"       })\r",
+							"    })\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"state\":\"PAUSED\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3002/state",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"state"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
