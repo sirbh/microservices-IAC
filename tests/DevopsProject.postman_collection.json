@@ -419,7 +419,7 @@
 							"        \"INIT->RUNNING\"\r",
 							"    ];\r",
 							"    pm.sendRequest({\r",
-							"        url:\"http://localhost:3002/state\",\r",
+							"        url:\"http://localhost:8080/state\",\r",
 							"        method:\"put\",\r",
 							"        body:{\r",
 							"            mode:\"raw\",\r",
@@ -434,7 +434,7 @@
 							"        }\r",
 							"    },()=>{\r",
 							"       pm.sendRequest({\r",
-							"        url:\"http://localhost:3002/state\",\r",
+							"        url:\"http://localhost:8080/state\",\r",
 							"        method:\"put\",\r",
 							"        headers:{\r",
 							"            \"Content-Type\":\"application/json\"\r",
@@ -452,7 +452,7 @@
 							"        }\r",
 							"       },(error,resp)=>{\r",
 							"           pm.sendRequest({\r",
-							"            url:\"http://localhost:3002/run-log\",\r",
+							"            url:\"http://localhost:8080/run-log\",\r",
 							"            method:\"get\"\r",
 							"           },(err,resp)=>{\r",
 							"            let k=3;\r",
@@ -486,12 +486,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3002/state",
+					"raw": "http://localhost:8080/state",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3002",
+					"port": "8080",
 					"path": [
 						"state"
 					]
