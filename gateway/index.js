@@ -2,7 +2,6 @@
 const amqp = require("amqplib");
 const express = require("express");
 const axios = require("axios");
-const {exec} = require("child_process");
 
 const app = express();
 const port = process.env.PORT || 3002;
@@ -15,6 +14,10 @@ let server = null;
 
 let state = "RUNNING";
 
+const state_logs = {
+  logs:[]
+}
+
 let channel;
 
 async function consumeAndRespond() {
@@ -24,25 +27,6 @@ async function consumeAndRespond() {
   await channel.assertExchange("The_Exchange", "direct", { durable: true });
   await channel.assertExchange("The_StateExchange", "fanout", { durable: true });
 
-  // const queue = "state_queue";
-  // await channel.assertQueue(queue);
-  // channel.bindQueue(queue, "The_ShutDownExchange", "");
-
-  //   channel.consume(
-  //     queue,
-  //     (msg) => {
-  //       if (msg.fields.routingKey === "message") {
-  //         console.log("text from message ", msg.content.toString());
-  //         channel.ack(msg);
-  //         channel.publish(
-  //           "The_Exchange",
-  //           "log",
-  //           Buffer.from(`${msg.content.toString()} MSG`)
-  //         );
-  //       }
-  //     },
-  //     { noAck: false }
-  //   );
 }
 
 app.use(express.json());
@@ -50,6 +34,12 @@ app.use(express.json());
 // Define a route that responds to GET requests on the root path
 app.get("/", (req, res) => {
   res.send("Hello, Express!");
+});
+
+app.get("/run-log", (req, res) => {
+  res.status(200);
+  res.json(state_logs);
+  res.end();
 });
 
 app.get("/messages", (req, res) => {
@@ -78,6 +68,7 @@ app.put("/state", (req, res) => {
     Buffer.from(`${req.body.state.toString()}`)
   ); 
   if(req.body.state === "RUNNING") {
+    state_logs.logs.push(new Date().toISOString()+" "+state+"->"+"RUNNING");
     state = req.body.state;
   }
   else if(req.body.state === "SHUTDOWN") {
@@ -100,11 +91,14 @@ app.put("/state", (req, res) => {
 
   }
   else if(req.body.state === "PAUSED") {
+    state_logs.logs.push(new Date().toISOString()+" "+state+"->"+"PAUSED");
     state = req.body.state;
   }
 
   else if(req.body.state === "INIT") {
-    console.log("IT was here")
+    console.log("CAlled");
+    state_logs.logs.push(new Date().toISOString()+" "+state+"->"+"INIT");
+    state_logs.logs.push(new Date().toISOString()+" "+"INIT"+"->"+"RUNNING");
     state = "RUNNING";
   }
 

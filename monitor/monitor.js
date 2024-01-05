@@ -51,7 +51,7 @@ async function consumeAndRespond() {
 }
 
 app.get("/", (req, res) => {
-  res.setHeader('Content-Type', 'text/plain');
+  // res.setHeader('Content-Type', 'text/plain');
   res.status(200);
   res.json(logs);
   res.end();
