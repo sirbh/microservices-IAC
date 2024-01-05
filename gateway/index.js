@@ -64,6 +64,12 @@ app.get("/messages", (req, res) => {
   });
 });
 
+app.get("/state", (req, res) => {
+  res.status(200);
+  res.send(state);
+  res.end();
+});
+
 app.put("/state", (req, res) => {
   console.log("state from http ", req.body.state);
   channel.publish(
@@ -71,7 +77,10 @@ app.put("/state", (req, res) => {
     "",
     Buffer.from(`${req.body.state.toString()}`)
   ); 
-  if(req.body.state === "SHUTDOWN") {
+  if(req.body.state === "RUNNING") {
+    state = req.body.state;
+  }
+  else if(req.body.state === "SHUTDOWN") {
     axios.get(`http://${rabbit_mq_host}:${rabbit_mq_port}/stop-mq`).then((response) => {
       res.status(200);
       res.end()
@@ -90,8 +99,21 @@ app.put("/state", (req, res) => {
     });
 
   }
+  else if(req.body.state === "PAUSED") {
+    state = req.body.state;
+  }
 
-  state = req.body.state;
+  else if(req.body.state === "INIT") {
+    console.log("IT was here")
+    state = "RUNNING";
+  }
+
+  else {
+    res.status(400);
+    res.end();
+    return;
+  }
+
   res.status(200);
   res.end();
 });
