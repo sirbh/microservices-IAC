@@ -8,7 +8,7 @@ build:
   script:
     - powershell -ExecutionPolicy Bypass -File .\scripts\remove_containers_and_images.ps1
     - docker system prune -a -f
-    - docker compose up -d
+    - docker compose build
   only:
     - project
   tags:
@@ -17,7 +17,7 @@ build:
 test:
   stage: test
   before_script:
-    # - docker compose up -d
+    - docker compose up -d
   after_script:
     - docker compose down
   script:
