@@ -91,7 +91,7 @@ services:
       - MONITOR_PORT=8087
       - MONITOR_HOST=monitor
     ports:
-      - 8080:8083
+      - 8083:8080
     container_name: knsach-gateway-container
     networks:
       - knsach_network
