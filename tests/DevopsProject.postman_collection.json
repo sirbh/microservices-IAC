@@ -218,7 +218,7 @@
 							"        console.log(logsSize)\r",
 							"        setTimeout(()=>{\r",
 							"            pm.sendRequest({\r",
-							"                url:\"http://localhost:8080/messages\",\r",
+							"                url:\"http://localhost:8083/messages\",\r",
 							"                method:\"get\"\r",
 							"            },(err,response)=>{\r",
 							"                if(err){\r",
