@@ -29,7 +29,7 @@ async function consumeAndRespond() {
 
 }
 
-app.use(express.json());
+app.use(express.text());
 
 // Define a route that responds to GET requests on the root path
 app.get("/", (req, res) => {
@@ -61,52 +61,51 @@ app.get("/state", (req, res) => {
 });
 
 app.put("/state", (req, res) => {
-  console.log("state from http ", req.body.state);
-  channel.publish(
-    "The_StateExchange",
-    "",
-    Buffer.from(`${req.body.state.toString()}`)
-  ); 
-  if(req.body.state === "RUNNING") {
-    state_logs.logs.push(new Date().toISOString()+" "+state+"->"+"RUNNING");
-    state = req.body.state;
-  }
-  else if(req.body.state === "SHUTDOWN") {
-    axios.get(`http://${rabbit_mq_host}:${rabbit_mq_port}/stop-mq`).then((response) => {
-      res.status(200);
-      res.end()
-    }).catch((error) => {
-      console.log(error); 
-      res.status(500);
-      res.end();
-    });
-
-    server.close(err=>{
-      if(err){
-        console.log(err);
-      }
-      console.log('Server closed');
-      process.exit(0);
-    });
-
-  }
-  else if(req.body.state === "PAUSED") {
-    state_logs.logs.push(new Date().toISOString()+" "+state+"->"+"PAUSED");
-    state = req.body.state;
-  }
-
-  else if(req.body.state === "INIT") {
-    console.log("CAlled");
-    state_logs.logs.push(new Date().toISOString()+" "+state+"->"+"INIT");
-    state_logs.logs.push(new Date().toISOString()+" "+"INIT"+"->"+"RUNNING");
-    state = "RUNNING";
-  }
-
-  else {
-    res.status(400);
+channel.publish(
+  "The_StateExchange",
+  "",
+  Buffer.from(`${req.body.toString()}`)
+); 
+if(req.body === "RUNNING") {
+  state_logs.logs.push(new Date().toISOString()+" "+state+"->"+"RUNNING");
+  state = req.body;
+}
+else if(req.body === "SHUTDOWN") {
+  axios.get(`http://${rabbit_mq_host}:${rabbit_mq_port}/stop-mq`).then((response) => {
+    res.status(200);
+    res.end()
+  }).catch((error) => {
+    console.log(error); 
+    res.status(500);
     res.end();
-    return;
-  }
+  });
+
+  server.close(err=>{
+    if(err){
+      console.log(err);
+    }
+    console.log('Server closed');
+    process.exit(0);
+  });
+
+}
+else if(req.body === "PAUSED") {
+  state_logs.logs.push(new Date().toISOString()+" "+state+"->"+"PAUSED");
+  state = req.body;
+}
+
+else if(req.body === "INIT") {
+  console.log("CAlled");
+  state_logs.logs.push(new Date().toISOString()+" "+state+"->"+"INIT");
+  state_logs.logs.push(new Date().toISOString()+" "+"INIT"+"->"+"RUNNING");
+  state = "RUNNING";
+}
+
+else {
+  res.status(400);
+  res.end();
+  return;
+}
 
   res.status(200);
   res.end();

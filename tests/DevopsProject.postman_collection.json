@@ -31,12 +31,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/messages",
+					"raw": "http://localhost:8083/messages",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8083",
 					"path": [
 						"messages"
 					]
@@ -57,7 +57,7 @@
 							"  const stateChangeTime =  new Date().toISOString().match(/\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}/)[0]\r",
 							"\r",
 							"  const request = {\r",
-							"    url: \"http://localhost:8080/messages\",\r",
+							"    url: \"http://localhost:8083/messages\",\r",
 							"    method: \"get\",\r",
 							"  };\r",
 							"\r",
@@ -100,20 +100,20 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"state\":\"INIT\"\r\n}",
+					"raw": "INIT",
 					"options": {
 						"raw": {
-							"language": "json"
+							"language": "text"
 						}
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/state",
+					"raw": "http://localhost:8083/state",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8083",
 					"path": [
 						"state"
 					]
@@ -134,7 +134,7 @@
 							"     let lastLog = \"\";\r",
 							"    setTimeout(()=>{\r",
 							"   pm.sendRequest({\r",
-							"    url:\"http://localhost:8080/messages\",\r",
+							"    url:\"http://localhost:8083/messages\",\r",
 							"    method:\"get\"\r",
 							"   },(err,response)=>{\r",
 							"    if(err){\r",
@@ -146,7 +146,7 @@
 							"\r",
 							"setTimeout(()=>{\r",
 							"   pm.sendRequest({\r",
-							"    url:\"http://localhost:8080/messages\",\r",
+							"    url:\"http://localhost:8083/messages\",\r",
 							"    method:\"get\"\r",
 							"   },(err,response)=>{\r",
 							"    if(err){\r",
@@ -174,20 +174,20 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"state\":\"PAUSED\"\r\n}",
+					"raw": "PAUSED",
 					"options": {
 						"raw": {
-							"language": "json"
+							"language": "text"
 						}
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/state",
+					"raw": "http://localhost:8083/state",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8083",
 					"path": [
 						"state"
 					]
@@ -208,7 +208,7 @@
 							"    let logsSize = \"\";\r",
 							"\r",
 							"    pm.sendRequest({\r",
-							"        url:\"http://localhost:8080/messages\",\r",
+							"        url:\"http://localhost:8083/messages\",\r",
 							"        method:\"get\"\r",
 							"    },(err,response)=>{\r",
 							"        if(err){\r",
@@ -242,20 +242,20 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"state\":\"RUNNING\"\r\n}",
+					"raw": "RUNNING",
 					"options": {
 						"raw": {
-							"language": "json"
+							"language": "text"
 						}
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/state",
+					"raw": "http://localhost:8083/state",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8083",
 					"path": [
 						"state"
 					]
@@ -272,7 +272,7 @@
 						"exec": [
 							"pm.test(\"Should return RUNNING state\",()=>{\r",
 							"    pm.sendRequest({\r",
-							"        url:\"http://localhost:8080/state\",\r",
+							"        url:\"http://localhost:8083/state\",\r",
 							"        method:\"get\"\r",
 							"    },(err,resp)=>{\r",
 							"        console.log(resp.text())\r",
@@ -289,20 +289,20 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"state\":\"RUNNING\"\r\n}",
+					"raw": "RUNNING",
 					"options": {
 						"raw": {
-							"language": "json"
+							"language": "text"
 						}
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/state",
+					"raw": "http://localhost:8083/state",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8083",
 					"path": [
 						"state"
 					]
@@ -319,7 +319,7 @@
 						"exec": [
 							"pm.test(\"Should return PAUSED state\",()=>{\r",
 							"    pm.sendRequest({\r",
-							"        url:\"http://localhost:8080/state\",\r",
+							"        url:\"http://localhost:8083/state\",\r",
 							"        method:\"get\"\r",
 							"    },(err,resp)=>{\r",
 							"        console.log(resp.text())\r",
@@ -336,20 +336,20 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"state\":\"PAUSED\"\r\n}",
+					"raw": "PAUSED",
 					"options": {
 						"raw": {
-							"language": "json"
+							"language": "text"
 						}
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/state",
+					"raw": "http://localhost:8083/state",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8083",
 					"path": [
 						"state"
 					]
@@ -365,8 +365,9 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Should return RUNNING state\",()=>{\r",
+							"    pm.expect\r",
 							"    pm.sendRequest({\r",
-							"        url:\"http://localhost:8080/state\",\r",
+							"        url:\"http://localhost:8083/state\",\r",
 							"        method:\"get\"\r",
 							"    },(err,resp)=>{\r",
 							"        console.log(resp.text())\r",
@@ -383,20 +384,20 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"state\":\"INIT\"\r\n}",
+					"raw": "INIT",
 					"options": {
 						"raw": {
-							"language": "json"
+							"language": "text"
 						}
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/state",
+					"raw": "http://localhost:8083/state",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8083",
 					"path": [
 						"state"
 					]
@@ -419,40 +420,36 @@
 							"        \"INIT->RUNNING\"\r",
 							"    ];\r",
 							"    pm.sendRequest({\r",
-							"        url:\"http://localhost:8080/state\",\r",
+							"        url:\"http://localhost:8083/state\",\r",
 							"        method:\"put\",\r",
 							"        body:{\r",
 							"            mode:\"raw\",\r",
-							"            raw:{\r",
-							"                state:\"RUNNING\"\r",
-							"            },\r",
+							"            raw:RUNNING,\r",
 							"            options:{\r",
 							"                raw:{\r",
-							"                    language:\"json\"\r",
+							"                    language:\"text\"\r",
 							"                }\r",
 							"            }\r",
 							"        }\r",
 							"    },()=>{\r",
 							"       pm.sendRequest({\r",
-							"        url:\"http://localhost:8080/state\",\r",
+							"        url:\"http://localhost:8083/state\",\r",
 							"        method:\"put\",\r",
 							"        headers:{\r",
 							"            \"Content-Type\":\"application/json\"\r",
 							"        },\r",
 							"        body:{\r",
 							"            mode:\"raw\",\r",
-							"            raw:{\r",
-							"                state:\"INIT\"\r",
-							"            },\r",
+							"           raw:INIT,\r",
 							"            options:{\r",
 							"                raw:{\r",
-							"                    language:\"json\"\r",
+							"                    language:\"text\"\r",
 							"                }\r",
 							"            }\r",
 							"        }\r",
 							"       },(error,resp)=>{\r",
 							"           pm.sendRequest({\r",
-							"            url:\"http://localhost:8080/run-log\",\r",
+							"            url:\"http://localhost:8083/run-log\",\r",
 							"            method:\"get\"\r",
 							"           },(err,resp)=>{\r",
 							"            let k=3;\r",
@@ -478,7 +475,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"state\":\"PAUSED\"\r\n}",
+					"raw": "PAUSED",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -486,12 +483,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/state",
+					"raw": "http://localhost:8083/state",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8083",
 					"path": [
 						"state"
 					]
