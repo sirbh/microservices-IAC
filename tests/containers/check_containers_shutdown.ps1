@@ -1,13 +1,11 @@
-$url = "http://localhost:8080/state"
+$url = "http://localhost:8083/state"
 
 # Replace 'your-data' with the data you want to send in the PUT request
-$data = @{
-    state = 'SHUTDOWN'
-}
+$data = 'SHUTDOWN'
 
 try {
     # Send a PUT request
-    $response = Invoke-RestMethod -Uri $url -Method PUT -Body ($data | ConvertTo-Json) -ContentType "application/json"
+    $response = Invoke-RestMethod -Uri $url -Method PUT -Body $data -ContentType "text/plain"
 
     # Display the response
     $response
