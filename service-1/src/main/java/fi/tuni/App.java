@@ -18,9 +18,7 @@ import java.util.concurrent.TimeUnit;
 import com.rabbitmq.client.DeliverCallback;
 
 /**
- * 
- * Hello world!
- *
+ * Main application class for the messaging service.
  */
 public class App {
 
@@ -30,6 +28,7 @@ public class App {
 
     private static Boolean sendRequest = true;
 
+    // Runnable task for scheduled execution
     private static Runnable task = () -> {
         ++counter;
         if (!sendRequest) {
@@ -38,14 +37,14 @@ public class App {
         System.out.println("Sending message " + counter + " to the exchange.");
         try {
             serverUrl = "http://" + host + ":" + port + "/" + "?text=";
-            // message to be sent to the exchange and http request
+            // Message to be sent to the exchange and HTTP request
             String message = "SND " + counter + " " + LocalDateTime.now().toString() + " "
                     + InetAddress.getByName(host).getHostAddress() + ":" + port;
 
-            // send message to the exchange
+            // Send message to the exchange
             channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY_MESSAGE, null, message.getBytes("UTF-8"));
 
-            // send http request by encoding the message
+            // Send HTTP request by encoding the message
             String encodedMessage = URLEncoder.encode(message, "UTF-8");
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(serverUrl + encodedMessage))
@@ -53,42 +52,48 @@ public class App {
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // send log to the exchange
+            // Send log to the exchange
             if (response.statusCode() == 200) {
                 channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY_LOG, null,
                         ("200 " + LocalDateTime.now().toString()).getBytes("UTF-8"));
             } else {
                 channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY_LOG, null,
-                        "something unexpected happend".getBytes("UTF-8"));
+                        "Something unexpected happened".getBytes("UTF-8"));
             }
 
         } catch (IOException | InterruptedException e) {
             try {
-
+                // Log unexpected exception
                 channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY_LOG, null,
-                        "something unexpected happend".getBytes("UTF-8"));
+                        "Something unexpected happened".getBytes("UTF-8"));
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
     };
 
+    /**
+     * Entry point of the application.
+     *
+     * @param args Command-line arguments.
+     * @throws Exception Thrown if an exception occurs.
+     */
     public static void main(String[] args) throws Exception {
         host = System.getenv("HOST");
         port = System.getenv("PORT");
-        // host = "localhost";
-        // port = "3000";
+
+        // Create RabbitMQ channel and exchange
         createChannelAndExchange();
 
+        // Set up scheduler for periodic task execution
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
         scheduler.scheduleAtFixedRate(task, 0, 2, TimeUnit.SECONDS);
         scheduler.schedule(() -> {
             scheduler.shutdown();
             System.out.println("Scheduler stopped.");
-
         }, 400, TimeUnit.SECONDS);
 
+        // Set up RabbitMQ message consumer
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
             System.out.println(" [x] Received '" + message + "'");
@@ -108,11 +113,10 @@ public class App {
             }
         };
 
+        // Declare and bind queue for state messages
         String stateQueue = channel.queueDeclare("service_1_state_queue", false, true, true, null).getQueue();
         channel.queueBind(stateQueue, "The_StateExchange", "");
-
         channel.basicConsume(stateQueue, true, deliverCallback, consumerTag -> {
         });
-
     }
 }
